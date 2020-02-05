@@ -64,12 +64,12 @@ Firmware for esk8 TX unit HW5.0 FW5.1
 ## LEDS
 
 - TX led
-  - #00F - >3.8v
-  - #0FF - >3.7v
-  - #F00 - <=3.7v
+  - HEX#00F - >3.8v
+  - HEX#0FF - >3.7v
+  - HEX#F00 - <=3.7v
 - RX led
-  - #F0F - NC
-  - #0FF - >50%
-  - #0F0 - >25%
-  - #FF0 - >10%
-  - #F00 - <=10%
+  - HEX#F0F - NC
+  - HEX#0FF - >50%
+  - HEX#0F0 - >25%
+  - HEX#FF0 - >10%
+  - HEX#F00 - <=10%
