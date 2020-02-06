@@ -17,4 +17,9 @@
   <ItemGroup>
     <None Include="TX5.1.ino" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.TX5.1.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

@@ -1,15 +1,20 @@
 /*
- Name:		TX5.ino
+ Name:		TX5.1.ino
  Created:	2/6/2020 8:51:50 PM
  Author:	kntzn
+ Info:      Firmware v.1 for HW gen.5
 */
 
-// the setup function runs once when you press reset or power the board
-void setup() {
+#define forever for(;;)
 
-}
 
-// the loop function runs over and over again until power down or reset
-void loop() {
-  
-}
+
+int main()
+	{
+	
+
+	forever 
+		{
+		
+		}
+	}
