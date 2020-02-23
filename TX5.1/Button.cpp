@@ -26,6 +26,7 @@ Button::Button (byte pinId):
     curr_state (State::unpressed),
     last_press (millis ())
     {
+    pinMode (pinId, INPUT_PULLUP);
     }
 
 void Button::upd ()

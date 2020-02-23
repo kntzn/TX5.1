@@ -116,6 +116,7 @@
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\Communication.h" />
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\Sarray.h" />
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\SysConfig.h" />
+    <ClInclude Include="Battery.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Display.h" />
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\RX5.1\RX5.1\RX5.1\Communication.cpp" />
+    <ClCompile Include="Battery.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Display.cpp" />
   </ItemGroup>

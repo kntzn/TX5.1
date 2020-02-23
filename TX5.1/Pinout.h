@@ -3,9 +3,9 @@
 
 #define HC12_SET       2
 
-#define GPI_TOP        3
-#define GPI_MIDDLE     5
-#define GPI_BOTTOM     6
+#define BTN_TOP        3
+#define BTN_MID        5
+#define BTN_BTM        6
 
 #define LED_2_B        9
 #define LED_2_G        10

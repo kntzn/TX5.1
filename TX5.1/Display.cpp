@@ -16,7 +16,6 @@ void Display::drawMainScr (int quality, int light_mode, int bat_v, int speed, in
 
 void Display::drawMenuScr (int cursor)
     {
-
     }
 
 void Display::display ()

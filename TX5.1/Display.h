@@ -20,6 +20,7 @@ class Display
     {
     private:
         Adafruit_SSD1306 sreen;
+        int y;
 
     public:
         Display ();
@@ -30,6 +31,7 @@ class Display
         void drawMenuScr (int cursor);
 
         void display ();
+
     };
 
 #endif
