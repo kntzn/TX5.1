@@ -5,13 +5,17 @@
  Info:      Firmware v.1 for HW gen.5
 */
 
+#include "LedStateIndicator.h"
 #include "Battery.h"
 #include "Display.h"
 #include "Button.h"
 #include "Communication.h"
 #include "Pinout.h"
+#include "SysConfig.h"
 
 #define forever for(;;)
+
+int readThrottle (uint8_t pot_pin);
 
 int main()
 	{
@@ -27,6 +31,11 @@ int main()
 
 	forever 
 		{
-		
+	
 		}
 	}
+
+int readThrottle (uint8_t pot_pin)
+    {
+    return map (analogRead (pot_pin), 0, 1023, PPM_MIN, PPM_MAX);
+    }

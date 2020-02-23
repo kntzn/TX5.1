@@ -12,7 +12,7 @@
 #include "Config.h"
 
 class Battery
-{
+    {
     private:
         double bat_voltage;
         uint8_t ADCpin;
@@ -25,7 +25,7 @@ class Battery
 
         void readVoltage (bool noFilter = false);
         double getVoltage ();
-};
+    };
 
 #endif
 
