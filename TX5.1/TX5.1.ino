@@ -5,14 +5,14 @@
  Info:      Firmware v.1 for HW gen.5
 */
 
+#include "Display.h"
+#include "Button.h"
+#include "Communication.h"
+
 #define forever for(;;)
-
-
 
 int main()
 	{
-	
-
 	forever 
 		{
 		
