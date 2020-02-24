@@ -17,27 +17,46 @@
 #include "Pinout.h"
 #include "SysConfig.h"
 
+
 #define forever for(;;)
 
 int readThrottle (uint8_t pot_pin);
 
 int main()
 	{
-    Display           OLED;
-    Button            b_top   (BTN_TOP);
-    Button            b_mid   (BTN_MID);
-    Button            b_btm   (BTN_BTM);
-    Communication     HC12    (HC12_SET, 0); // TODO: load channel from EEPROM
-    Battery           battery (VCC_IN);
-    LedStateIndicator lsi     (LED_1_R, LED_1_G, LED_1_B,
-                               LED_2_R, LED_2_G, LED_2_B);
+    init ();
+    Serial.begin (HC12_BAUD);
+    while (!Serial);
 
+    pinMode (POT_PWR, OUTPUT);
+    digitalWrite (POT_PWR, HIGH);
+
+    Display           OLED;
+    Button            b_top          (BTN_TOP);
+    Button            b_mid          (BTN_MID);
+    Button            b_btm          (BTN_BTM);
+    Communication     HC12           (HC12_SET, 0); // TODO: load channel from EEPROM
+    DataHandler       data_container (mode::sport, lights_mode::_off, false);
+    Battery           battery        (VCC_IN);
+    LedStateIndicator lsi            (LED_1_R, LED_1_G, LED_1_B,
+                                      LED_2_R, LED_2_G, LED_2_B);
+    
     bool waitingForResponse = false;
     Communication::command prev_request = Communication::command::trip;
+    
+
 
 	forever 
 		{
+        
 
+        data_container.setThrottle (readThrottle (POT_IN));
+        data_container.loadDriveControllerParams (HC12.argbuf ());
+        HC12.sendCommand (Communication::command::motor);
+        delay (25);
+
+
+        OLED.drawMenuScr (readThrottle (POT_IN));
 
         battery.update ();
         b_top.upd ();
@@ -50,5 +69,5 @@ int main()
 
 int readThrottle (uint8_t pot_pin)
     {
-    return map (analogRead (pot_pin), 0, 1023, PPM_MIN, PPM_MAX);
+    return map (1023 - analogRead (pot_pin), 0, 1023, THR_MIN, THR_MAX);
     }

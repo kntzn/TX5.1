@@ -9,6 +9,8 @@
 	#include "WProgram.h"
 #endif
 
+#include "SysConfig.h"
+
 class DataHandler
     {
     private:
@@ -26,6 +28,8 @@ class DataHandler
 
     public:
         DataHandler (mode mode_selected, lights_mode l_mode_selected, bool ul_active);
+
+        void setThrottle (int new_throrrle_value);
 
         void saveDriveControllerParams (uint8_t* buffer);
         void saveBMSparams (uint8_t* buffer);

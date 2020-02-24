@@ -3,7 +3,7 @@
 // 
 
 #include "DataHandler.h"
-#include "SysConfig.h"
+
 
 DataHandler::DataHandler (mode mode_selected, lights_mode l_mode_selected, bool ul_active):
     rx_bat_percents (0.0), rx_bat_voltage (0.0), rx_bat_cell_voltage (0.0),
@@ -11,10 +11,16 @@ DataHandler::DataHandler (mode mode_selected, lights_mode l_mode_selected, bool 
     rx_dc_speed (0.0), rx_dc_accel (0.0),
     rx_dc_odo (0.0), rx_dc_trip (0.0), rx_dc_left (0.0),
     rx_dc_consumption (0.0),
-    tx_dc_mode (mode_selected), tx_dc_throttle (0),
+    tx_dc_mode (mode_selected), tx_dc_throttle (THR_MID),
     tx_lc_lights_mode (l_mode_selected), tx_lc_underlights (ul_active),
     tx_cont_last_trip (false)
     {
+    }
+
+
+void DataHandler::setThrottle (int new_throrrle_value)
+    {
+    tx_dc_throttle = new_throrrle_value;
     }
 
 void DataHandler::saveDriveControllerParams (uint8_t * buffer)

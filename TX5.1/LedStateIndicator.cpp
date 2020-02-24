@@ -24,6 +24,12 @@ LedStateIndicator::LedStateIndicator (uint8_t tx_r, uint8_t tx_g, uint8_t tx_b,
     tx_r (tx_r), tx_g (tx_g), tx_b (tx_b),
     rx_r (rx_r), rx_g (rx_g), rx_b (rx_b)
     {
+    pinMode (tx_r, OUTPUT);
+    pinMode (tx_g, OUTPUT);
+    pinMode (tx_b, OUTPUT);
+    pinMode (rx_r, OUTPUT);
+    pinMode (rx_g, OUTPUT);
+    pinMode (rx_b, OUTPUT);
     }
 
 void LedStateIndicator::update (double voltage, double percents)
