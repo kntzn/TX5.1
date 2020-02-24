@@ -32,8 +32,6 @@ int main()
     LedStateIndicator lsi     (LED_1_R, LED_1_G, LED_1_B,
                                LED_2_R, LED_2_G, LED_2_B);
 
-
-
     bool waitingForResponse = false;
     Communication::command prev_request = Communication::command::trip;
 
