@@ -23,7 +23,7 @@ class Battery
     public:
         Battery (uint8_t read_pin);
 
-        void readVoltage (bool noFilter = false);
+        void update ();
         double getVoltage ();
     };
 

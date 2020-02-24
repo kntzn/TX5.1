@@ -119,6 +119,7 @@
     <ClInclude Include="Battery.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="DataHandler.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="LedStateIndicator.h" />
     <ClInclude Include="Pinout.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="..\..\RX5.1\RX5.1\RX5.1\Communication.cpp" />
     <ClCompile Include="Battery.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="DataHandler.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="LedStateIndicator.cpp" />
   </ItemGroup>

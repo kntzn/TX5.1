@@ -36,7 +36,7 @@ double Battery::aver_analog (uint32_t times)
     return result / static_cast<double> (times);
     }
 
-void Battery::readVoltage (bool noFilter)
+void Battery::update ()
     {
     // Reads new voltage
     double new_bat_voltage = (readVcc () * aver_analog () / 1023 / 1000.0);
