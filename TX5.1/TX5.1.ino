@@ -48,15 +48,15 @@ int main()
 
 	forever 
 		{
-        
-
         data_container.setThrottle (readThrottle (POT_IN));
         data_container.loadDriveControllerParams (HC12.argbuf ());
         HC12.sendCommand (Communication::command::motor);
         delay (25);
 
 
-        OLED.drawMenuScr (readThrottle (POT_IN));
+        OLED.drawMainScr (0, lights_mode::_off, battery.getVoltage (), 
+                          22, mode::cruise, 11.1, 100,
+                          999.9, 9999);
 
         battery.update ();
         b_top.upd ();
