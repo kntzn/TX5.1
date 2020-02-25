@@ -114,6 +114,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\cobs.h" />
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\Communication.h" />
+    <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\kstd.h" />
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\Sarray.h" />
     <ClInclude Include="..\..\RX5.1\RX5.1\RX5.1\SysConfig.h" />
     <ClInclude Include="Battery.h" />

@@ -54,7 +54,7 @@ int main()
         delay (25);
 
 
-        OLED.drawMainScr (0, lights_mode::_off, battery.getVoltage (), 
+        OLED.drawMainScr (lights_mode::_all, 
                           22, mode::cruise, 11.1, 100,
                           999.9, 9999);
 
