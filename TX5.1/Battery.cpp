@@ -49,6 +49,7 @@ void Battery::update ()
 Battery::Battery (uint8_t read_pin):
     ADCpin (read_pin)
     {
+    bat_voltage = (readVcc () * aver_analog () / 1023 / 1000.0);
     }
 
 double Battery::getVoltage ()

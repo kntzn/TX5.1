@@ -17,8 +17,13 @@ void Display::drawFLsymb (uint8_t x, uint8_t y)
 
 void Display::drawBLsymb (uint8_t x, uint8_t y)
     {
-    screen.drawCircle (x + 3, y + 3, 3, WHITE);
-    screen.drawCircle (x + 3, y + 3, 1, WHITE);
+    screen.fillCircle (x + 3, y + 3, 1, WHITE);
+    screen.drawPixel  (x + 5, y + 6, WHITE);
+    screen.drawPixel  (x + 1, y + 6, WHITE);
+    screen.drawPixel  (x + 0, y + 3, WHITE);
+    screen.drawPixel  (x + 6, y + 3, WHITE);
+    screen.drawPixel  (x + 5, y + 0, WHITE);
+    screen.drawPixel  (x + 1, y + 0, WHITE);
     }
 
 void Display::drawULsymb (uint8_t x, uint8_t y)
@@ -86,7 +91,7 @@ void Display::drawMainScr (lights_mode l_mode_sel,
         }
 
     // Mode
-    screen.setCursor (41, SCR_H/4 );
+    screen.setCursor (41, SCR_H/4 + 3);
     switch (mode_sel)
         {
         case mode::lock:
@@ -109,19 +114,23 @@ void Display::drawMainScr (lights_mode l_mode_sel,
         }
 
     // Lights mode
-    drawULsymb (SCR_MID_X - 16, 0);
+    drawULsymb (SCR_MID_X - 12, 0);
     switch (l_mode_sel)
         {
         case lights_mode::_off:
             break;
         case lights_mode::_rear:
-            drawBLsymb (SCR_MID_X - 8, 0);
+            drawBLsymb (SCR_MID_X - 4, 0);
             break;
         case lights_mode::_all:
-            drawBLsymb (SCR_MID_X - 8, 0);
-            drawFLsymb (SCR_MID_X - 0, 0);
+            drawBLsymb (SCR_MID_X - 4, 0);
+            drawFLsymb (SCR_MID_X + 4, 0);
             break;
         case lights_mode::_auto:
+            drawBLsymb (SCR_MID_X - 4, 0);
+            drawFLsymb (SCR_MID_X + 4, 0);
+            screen.setCursor (SCR_MID_X + 12, 0);
+            screen.print ("A");
             break;
         default:
             break;

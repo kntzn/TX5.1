@@ -44,8 +44,6 @@ int main()
     bool waitingForResponse = false;
     Communication::command prev_request = Communication::command::trip;
     
-
-
 	forever 
 		{
         data_container.setThrottle (readThrottle (POT_IN));
@@ -54,7 +52,7 @@ int main()
         delay (25);
 
 
-        OLED.drawMainScr (lights_mode::_all, 
+        OLED.drawMainScr (lights_mode::_auto, 
                           22, mode::cruise, 11.1, 100,
                           999.9, 9999);
 

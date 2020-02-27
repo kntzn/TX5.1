@@ -12,4 +12,4 @@
 #define LSI_RX_YEL   25.0
 #define LSI_RX_GRN   50.0
 
-#define MSCR_ODO_TRP_SWITCH_TIME 2000
+#define MSCR_ODO_TRP_SWITCH_TIME 4000
