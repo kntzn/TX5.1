@@ -41,14 +41,84 @@ int main()
     LedStateIndicator lsi            (LED_1_R, LED_1_G, LED_1_B,
                                       LED_2_R, LED_2_G, LED_2_B);
     
+    bool connected = false;
     bool waitingForResponse = false;
+    TIMER_SET (last_request_tmr);
+    int ping = 0;
     Communication::command prev_request = Communication::command::trip;
     
 	forever 
 		{
-        data_container.setThrottle (readThrottle (POT_IN));
-        data_container.loadDriveControllerParams (HC12.argbuf ());
-        HC12.sendCommand (Communication::command::motor);
+
+        // If tx is in transmitting mode
+        if (!waitingForResponse)
+            {
+            // If it is time to send request
+            if (TIMER_GET (last_request_tmr) > REQUEST_PERIOD)
+                {
+                // Activating idle mdoe
+                TIMER_RST (last_request_tmr);
+                waitingForResponse = true;
+
+                // And sending request 
+                switch (prev_request)
+                    {
+                    case Communication::command::trip:
+                        prev_request = Communication::command::battery;
+                        HC12.sendCommand (prev_request);
+                        break;
+                    case Communication::command::battery:
+                        prev_request = Communication::command::trip;
+                        HC12.sendCommand (prev_request);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            // else sending standart Drive Controller command
+            else
+                {
+                data_container.setThrottle (readThrottle (POT_IN));
+                data_container.loadDriveControllerParams (HC12.argbuf ());
+                HC12.sendCommand (Communication::command::motor);
+                }
+            }
+        // If tx is in receiveing mode
+        else
+            {
+            // Timeout
+            if (TIMER_GET (last_request_tmr) > RESPONSE_TIMEOUT)
+                {
+                waitingForResponse = false;
+                connected = false;
+                }
+
+            Communication::response resp;
+            if ((resp = HC12.receiveResponse ()) !=
+                Communication::response::noresp)
+                {
+                // Calculates the delay between TX/RX
+                ping = TIMER_GET (last_request_tmr) / 2.0;
+
+                // Saves
+                switch (resp)
+                    {
+                    case Communication::response::battery:
+                        data_container.saveBMSparams (HC12.argbuf ());
+                        break;
+                    case Communication::response::trip:
+                        data_container.saveDriveControllerParams (HC12.argbuf ());
+                        break;
+                    default:
+                        break;
+                    }
+
+                HC12.flush ();
+                waitingForResponse = false;
+                connected = true;
+                }
+            }
+
         delay (25);
 
 
