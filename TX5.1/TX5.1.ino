@@ -22,7 +22,10 @@
 
 int readThrottle (uint8_t pot_pin);
 
-void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel);
+bool changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel);
+bool changeRideModeBtnHandler   (Button* b, mode        &mode_sel);
+
+// TODO: interface
 
 int main()
 	{
@@ -31,28 +34,42 @@ int main()
     pinMode (POT_PWR, OUTPUT);
     digitalWrite (POT_PWR, HIGH);
 
+    // Classes
     Display           OLED;
     Button            b_top          (BTN_TOP);
     Button            b_mid          (BTN_MID);
     Button            b_btm          (BTN_BTM);
     Communication     HC12           (HC12_SET, 0); // TODO: load channel from EEPROM
-    DataHandler       data_container (mode::sport, lights_mode::_off, false);
+    DataHandler       data_container (mode::sport, lights_mode::_off, false); // TODO: load lights from EEPROM
     Battery           battery        (VCC_IN);
     LedStateIndicator lsi            (LED_1_R, LED_1_G, LED_1_B,
                                       LED_2_R, LED_2_G, LED_2_B);
     
+    // Communication vars
+    bool pendingChange = false;
     bool connected = false;
     bool waitingForResponse = false;
     TIMER_SET (last_request_tmr);
     int ping = 0;
     Communication::command prev_request = Communication::command::trip;
     
+    // TX vars
     bool        ul_pwr_sel = true;
     lights_mode l_mode_sel = lights_mode::_auto; // TODO: load from eeprom
     mode        r_mode_sel = mode::eco;          // TODO: load from eeprom
 
+    // Other
+    Display::screen_name scr_id = Display::screen_name::main;
+
+    // Main cycle
 	forever 
 		{
+        // Updates buttons
+        b_top.update ();
+        b_mid.update ();
+        b_btm.update ();
+        battery.update ();
+
         // If tx is in transmitting mode
         if (!waitingForResponse)
             {
@@ -123,17 +140,33 @@ int main()
                 }
             }
 
-        OLED.drawMainScr (l_mode_sel, ul_pwr_sel,
-                          static_cast <int> (data_container.getSpeed()), 
-                          r_mode_sel, 
-                          data_container.getApprox(),
-                          static_cast<int> (data_container.getBatPercents ()),
-                          data_container.getTrip (), data_container.getOdo());
+        // Screen switch
+        switch (scr_id)
+            {
+            case Display::screen_name::main:
+                OLED.drawMainScr (l_mode_sel, ul_pwr_sel,
+                                  static_cast <int> (data_container.getSpeed ()),
+                                  r_mode_sel,
+                                  data_container.getApprox (),
+                                  static_cast<int> (data_container.getBatPercents ()),
+                                  data_container.getTrip (), data_container.getOdo ());
 
-        // Handles top btn (lights mode)
-        changeLightsModeBtnHandler (&b_top, l_mode_sel);
+                // Handles top btn (lights mode)
+                changeLightsModeBtnHandler (&b_top, l_mode_sel);
+                // Handles btm btn (ride   mode)
+                changeRideModeBtnHandler   (&b_btm, r_mode_sel); 
+                break;
+            case Display::screen_name::menu:
+                // reserved
+                break;
+            default:
+                break;
+            }
+
+
 
         lsi.update (battery.getVoltage ());
+        OLED.display ();
         }
 	}
 
@@ -142,7 +175,7 @@ int readThrottle (uint8_t pot_pin)
     return map (1023 - analogRead (pot_pin), 0, 1023, THR_MIN, THR_MAX);
     }
 
-void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
+bool changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
     {
     if (b->state () == Button::State::hold)
         {
@@ -151,7 +184,7 @@ void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
         else
             l_mode_sel = lights_mode::_off;
         }
-    else if (b->state () == Button::State::pressed)
+    else if (b->state () == Button::State::press)
         switch (l_mode_sel)
             {
             case lights_mode::_off:
@@ -162,6 +195,31 @@ void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
                 break;
             case lights_mode::_all:
                 l_mode_sel = lights_mode::_off;
+                break;
+            default:
+                break;
+            }
+    }
+bool changeRideModeBtnHandler   (Button *b, mode        &mode_sel)
+    {
+    if (b->state () == Button::State::hold)
+        {
+        if (mode_sel != mode::hybrid)
+            mode_sel = mode::hybrid;
+        else
+            mode_sel = mode::lock;
+        }
+    else if (b->state () == Button::State::press)
+        switch (mode_sel)
+            {
+            case mode::eco:
+                mode_sel = mode::cruise;
+                break;
+            case mode::cruise:
+                mode_sel = mode::sport;
+                break;
+            case mode::sport:
+                mode_sel = mode::eco;
                 break;
             default:
                 break;

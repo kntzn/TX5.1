@@ -35,6 +35,12 @@
 
 class Display
     {
+    public:
+        enum class screen_name
+            {
+            main,
+            menu
+            };
     private:
         Adafruit_SSD1306 screen;
         TIMER_SET (mscr_odo_trp_switch);

@@ -9,6 +9,9 @@
 	#include "WProgram.h"
 #endif
 
+#define N_TESTS 10
+#define HOLD_TIME 500
+
 class Button
     {
     public:
@@ -32,7 +35,7 @@ class Button
     public:
         Button (byte pinId);
 
-        void upd ();
+        void update ();
 
         State state ();
 

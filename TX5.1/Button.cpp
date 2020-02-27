@@ -4,10 +4,6 @@
 
 #include "Button.h"
 
-#define N_TESTS 10
-#define HOLD_TIME 500
-
-
 bool Button::isPrsd ()
     {
     int prsd = 0;
@@ -29,7 +25,7 @@ Button::Button (byte pinId):
     pinMode (pinId, INPUT_PULLUP);
     }
 
-void Button::upd ()
+void Button::update ()
     {
     bool current_isPrsd = isPrsd ();
 

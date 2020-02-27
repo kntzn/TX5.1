@@ -17,7 +17,6 @@ DataHandler::DataHandler (mode mode_selected, lights_mode l_mode_selected, bool 
     {
     }
 
-
 void DataHandler::setThrottle (int new_throrrle_value)
     {
     tx_dc_throttle = new_throrrle_value;
@@ -35,11 +34,11 @@ void DataHandler::setUnderlightsPwr (bool on)
     tx_lc_underlights = on;
     }
 
-double DataHandler::getBatPercents ()
+double DataHandler::getBatPercents    ()
     {
     return rx_bat_percents;
     }
-double DataHandler::getBatVoltage ()
+double DataHandler::getBatVoltage     ()
     {
     return rx_bat_voltage;
     }
@@ -47,31 +46,31 @@ double DataHandler::getBatCellVoltage ()
     {
     return rx_bat_cell_voltage;
     }
-double DataHandler::getBatWhDrawn ()
+double DataHandler::getBatWhDrawn     ()
     {
     return rx_bat_wh_drawn;
     }
-double DataHandler::getBatWhLeft ()
+double DataHandler::getBatWhLeft      ()
     {
     return rx_bat_wh_left;
     }
-double DataHandler::getSpeed ()
+double DataHandler::getSpeed          ()
     {
     return rx_dc_speed;
     }
-double DataHandler::getOdo ()
+double DataHandler::getOdo            ()
     {
     return rx_dc_odo;
     }
-double DataHandler::getTrip ()
+double DataHandler::getTrip           ()
     {
     return rx_dc_trip;
     }
-double DataHandler::getApprox ()
+double DataHandler::getApprox         ()
     {
     return rx_dc_left;
     }
-double DataHandler::getConsumption ()
+double DataHandler::getConsumption    ()
     {
     return rx_dc_consumption;
     }
@@ -88,7 +87,7 @@ void DataHandler::saveDriveControllerParams (uint8_t * buffer)
                          static_cast <double> (buffer [7]);
     rx_dc_consumption = (static_cast <double> (buffer [8])) * 10.0;
     }
-void DataHandler::saveBMSparams (uint8_t * buffer)
+void DataHandler::saveBMSparams             (uint8_t * buffer)
     {
     rx_bat_percents     =  static_cast <double> (buffer [0]);
     rx_bat_voltage      = (static_cast <double> (buffer [1])) * 10.0;
