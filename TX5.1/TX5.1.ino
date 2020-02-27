@@ -22,12 +22,12 @@
 
 int readThrottle (uint8_t pot_pin);
 
+void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel);
+
 int main()
 	{
     init ();
-    Serial.begin (HC12_BAUD);
-    while (!Serial);
-
+    
     pinMode (POT_PWR, OUTPUT);
     digitalWrite (POT_PWR, HIGH);
 
@@ -47,9 +47,12 @@ int main()
     int ping = 0;
     Communication::command prev_request = Communication::command::trip;
     
+    bool        ul_pwr_sel = true;
+    lights_mode l_mode_sel = lights_mode::_auto; // TODO: load from eeprom
+    mode        r_mode_sel = mode::eco;          // TODO: load from eeprom
+
 	forever 
 		{
-
         // If tx is in transmitting mode
         if (!waitingForResponse)
             {
@@ -93,6 +96,7 @@ int main()
                 connected = false;
                 }
 
+            // Waiting for request
             Communication::response resp;
             if ((resp = HC12.receiveResponse ()) !=
                 Communication::response::noresp)
@@ -119,23 +123,47 @@ int main()
                 }
             }
 
-        delay (25);
+        OLED.drawMainScr (l_mode_sel, ul_pwr_sel,
+                          static_cast <int> (data_container.getSpeed()), 
+                          r_mode_sel, 
+                          data_container.getApprox(),
+                          static_cast<int> (data_container.getBatPercents ()),
+                          data_container.getTrip (), data_container.getOdo());
 
+        // Handles top btn (lights mode)
+        changeLightsModeBtnHandler (&b_top, l_mode_sel);
 
-        OLED.drawMainScr (lights_mode::_auto, 
-                          22, mode::cruise, 11.1, 100,
-                          999.9, 9999);
-
-        battery.update ();
-        b_top.upd ();
-        b_mid.upd ();
-        b_btm.upd ();
         lsi.update (battery.getVoltage ());
-        OLED.display ();
         }
 	}
 
 int readThrottle (uint8_t pot_pin)
     {
     return map (1023 - analogRead (pot_pin), 0, 1023, THR_MIN, THR_MAX);
+    }
+
+void changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
+    {
+    if (b->state () == Button::State::hold)
+        {
+        if (l_mode_sel != lights_mode::_auto)
+            l_mode_sel = lights_mode::_auto;
+        else
+            l_mode_sel = lights_mode::_off;
+        }
+    else if (b->state () == Button::State::pressed)
+        switch (l_mode_sel)
+            {
+            case lights_mode::_off:
+                l_mode_sel = lights_mode::_rear;
+                break;
+            case lights_mode::_rear:
+                l_mode_sel = lights_mode::_all;
+                break;
+            case lights_mode::_all:
+                l_mode_sel = lights_mode::_off;
+                break;
+            default:
+                break;
+            }
     }

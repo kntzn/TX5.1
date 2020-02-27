@@ -43,7 +43,7 @@ Display::Display ()
     screen.display ();
     }
 
-void Display::drawMainScr (lights_mode l_mode_sel,
+void Display::drawMainScr (lights_mode l_mode_sel, bool ul_pwr_sel,
                            int speed, mode mode_sel, double approx, int percents,
                            double trip, int odo)
     {
@@ -114,7 +114,8 @@ void Display::drawMainScr (lights_mode l_mode_sel,
         }
 
     // Lights mode
-    drawULsymb (SCR_MID_X - 12, 0);
+    if (ul_pwr_sel)
+        drawULsymb (SCR_MID_X - 12, 0);
     switch (l_mode_sel)
         {
         case lights_mode::_off:

@@ -46,7 +46,7 @@ class Display
     public:
         Display ();
         
-        void drawMainScr (lights_mode l_mode_sel,
+        void drawMainScr (lights_mode l_mode_sel, bool ul_pwr_sel,
                           int speed, mode mode_sel, double approx, int percents,
                           double trip, int odo);
         void drawMenuScr (int cursor);
