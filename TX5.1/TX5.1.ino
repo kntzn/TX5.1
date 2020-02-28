@@ -152,9 +152,15 @@ int main()
                                   data_container.getTrip (), data_container.getOdo ());
 
                 // Handles top btn (lights mode)
-                changeLightsModeBtnHandler (&b_top, l_mode_sel);
+                if (changeLightsModeBtnHandler (&b_top, l_mode_sel))
+                    {
+                    data_container.setLightsMode (l_mode_sel);
+                    data_container.loadLightControllerParams (HC12.argbuf ());
+                    HC12.sendCommand (Communication::command::lights);
+                    }
                 // Handles btm btn (ride   mode)
-                changeRideModeBtnHandler   (&b_btm, r_mode_sel); 
+                changeRideModeBtnHandler (&b_btm, r_mode_sel);
+
                 break;
             case Display::screen_name::menu:
                 // reserved
@@ -183,8 +189,10 @@ bool changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
             l_mode_sel = lights_mode::_auto;
         else
             l_mode_sel = lights_mode::_off;
+        return true;
         }
-    else if (b->state () == Button::State::press)
+    else if (b->state () == Button::State::released)
+        {
         switch (l_mode_sel)
             {
             case lights_mode::_off:
@@ -199,6 +207,9 @@ bool changeLightsModeBtnHandler (Button* b, lights_mode &l_mode_sel)
             default:
                 break;
             }
+        return true;
+        }
+    return false;
     }
 bool changeRideModeBtnHandler   (Button *b, mode        &mode_sel)
     {
@@ -208,8 +219,11 @@ bool changeRideModeBtnHandler   (Button *b, mode        &mode_sel)
             mode_sel = mode::hybrid;
         else
             mode_sel = mode::lock;
+
+        return true;
         }
-    else if (b->state () == Button::State::press)
+    else if (b->state () == Button::State::released)
+        {
         switch (mode_sel)
             {
             case mode::eco:
@@ -219,9 +233,13 @@ bool changeRideModeBtnHandler   (Button *b, mode        &mode_sel)
                 mode_sel = mode::sport;
                 break;
             case mode::sport:
+            case mode::hybrid:
                 mode_sel = mode::eco;
                 break;
             default:
                 break;
             }
+        return true;
+        }
+    return false;
     }

@@ -77,15 +77,15 @@ double DataHandler::getConsumption    ()
 
 void DataHandler::saveDriveControllerParams (uint8_t * buffer)
     {
-    rx_dc_speed       =  static_cast <double> (buffer [0]);
-    rx_dc_accel       = (static_cast <double> (buffer [1]) - 127.0)/10.0;
-    rx_dc_odo         = (static_cast <double> (buffer [2])) * 256 +
-                         static_cast <double> (buffer [3]);
-    rx_dc_trip        = (static_cast <double> (buffer [4])) * 256 +
-                         static_cast <double> (buffer [5]);
-    rx_dc_left        = (static_cast <double> (buffer [6])) * 256 +
-                         static_cast <double> (buffer [7]);
-    rx_dc_consumption = (static_cast <double> (buffer [8])) * 10.0;
+    rx_dc_speed       =   static_cast <double> (buffer [0]);
+    rx_dc_accel       =  (static_cast <double> (buffer [1]) - 127.0)/10.0;
+    rx_dc_odo         =  (static_cast <double> (buffer [2])) * 256 +
+                          static_cast <double> (buffer [3]);
+    rx_dc_trip        = ((static_cast <double> (buffer [4])) * 256 +
+                          static_cast <double> (buffer [5])) / 10.0;
+    rx_dc_left        = ((static_cast <double> (buffer [6])) * 256 +
+                          static_cast <double> (buffer [7])) / 10.0;
+    rx_dc_consumption =  (static_cast <double> (buffer [8])) * 10.0;
     }
 void DataHandler::saveBMSparams             (uint8_t * buffer)
     {
