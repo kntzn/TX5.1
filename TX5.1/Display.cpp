@@ -153,6 +153,30 @@ void Display::drawMenuScr (int cursor)
     screen.print ("-->");
     }
 
+void Display::drawBatScr (double voltage, double cellVoltage, int percents,
+                          double approx, double whLeft, double consumption)
+    {
+    screen.clearDisplay ();
+    screen.setCursor (0, 0);
+    screen.setTextSize (1);
+    
+    screen.print ("U=");
+    screen.print (voltage, 1);
+    screen.print ("v (");
+    screen.print (cellVoltage);
+    screen.print ("v, ");
+    screen.print (percents);
+    screen.println ("%)");
+    screen.print ("C=");
+    screen.print (whLeft, 0);
+    screen.print ("wh @ ");
+    screen.print (consumption);
+    screen.println ("wh/km");
+    screen.print ("S=");
+    screen.print (approx);
+    screen.print ("km left");
+    }
+
 void Display::display ()
     {
     screen.display ();

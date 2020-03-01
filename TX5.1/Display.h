@@ -44,7 +44,8 @@ class Display
             {
             main,
             menu,
-            connecting
+            connecting,
+            battery
             };
     private:
         Adafruit_SSD1306 screen;
@@ -61,6 +62,8 @@ class Display
                           int speed, mode mode_sel, double approx, int percents,
                           double trip, int odo);
         void drawMenuScr (int cursor);
+        void drawBatScr (double voltage, double cellVoltage, int percents,
+                         double approx, double whLeft, double consumption);
 
         void display ();
 

@@ -90,8 +90,8 @@ void DataHandler::saveDriveControllerParams (uint8_t * buffer)
 void DataHandler::saveBMSparams             (uint8_t * buffer)
     {
     rx_bat_percents     =  static_cast <double> (buffer [0]);
-    rx_bat_voltage      = (static_cast <double> (buffer [1])) * 10.0;
-    rx_bat_cell_voltage = (static_cast <double> (buffer [2])) * 100.0 + BAT_ABS_MIN_CELL;
+    rx_bat_voltage      = (static_cast <double> (buffer [1])) / 10.0;
+    rx_bat_cell_voltage = (static_cast <double> (buffer [2])) / 100.0 + BAT_ABS_MIN_CELL;
     rx_bat_wh_drawn     =  static_cast <double> (buffer [3]);
     rx_bat_wh_left      =  static_cast <double> (buffer [4]);
     }

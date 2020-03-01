@@ -54,8 +54,8 @@ int main()
     Communication::command prev_request = Communication::command::trip;
     
     // TX vars
-    bool        ul_pwr_sel = true;
-    lights_mode l_mode_sel = lights_mode::_auto; // TODO: load from eeprom
+    bool        ul_pwr_sel = false;
+    lights_mode l_mode_sel = lights_mode::_off; // TODO: load from eeprom
     mode        r_mode_sel = mode::eco;          // TODO: load from eeprom
 
     // Other
@@ -187,7 +187,7 @@ int main()
                                 scr_id = Display::screen_name::main;
                                 break;
                             case MENU_CURSOR_POS_BAT:
-                                // Reserved
+                                scr_id = Display::screen_name::battery;
                                 break;
                             case MENU_CURSOR_POS_TRP:
                                 // Reserved
@@ -203,6 +203,18 @@ int main()
                         if (menu_cursor < MENU_CURSOR_POS_TRP)
                             menu_cursor++;
                         
+                break;
+                }
+            case Display::screen_name::battery:
+                {
+                OLED.drawBatScr (data_container.getBatVoltage (),
+                                 data_container.getBatCellVoltage (),
+                                 static_cast<int> (data_container.getBatPercents ()),
+                                 data_container.getApprox (),
+                                 data_container.getBatWhLeft (),
+                                 data_container.getConsumption ());
+                if (b_mid.state () == Button::State::released)
+                    scr_id = Display::screen_name::menu;
                 break;
                 }
             default:
