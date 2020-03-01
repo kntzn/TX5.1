@@ -50,6 +50,7 @@ class Display
     private:
         Adafruit_SSD1306 screen;
         TIMER_SET (mscr_odo_trp_switch);
+        TIMER_SET (_conn_scr_ticks_timer);
 
         void drawFLsymb (uint8_t x, uint8_t y);
         void drawBLsymb (uint8_t x, uint8_t y);
@@ -64,6 +65,7 @@ class Display
         void drawMenuScr (int cursor);
         void drawBatScr (double voltage, double cellVoltage, int percents,
                          double approx, double whLeft, double consumption);
+        void drawConnScr ();
 
         void display ();
 

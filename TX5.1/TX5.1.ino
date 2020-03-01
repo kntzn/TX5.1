@@ -79,21 +79,33 @@ int main()
                 {
                 // Activating idle mdoe
                 TIMER_RST (last_request_tmr);
-                waitingForResponse = true;
-
-                // And sending request 
-                switch (prev_request)
+                // Lights mode is at first prority
+                if (pendingLmodeChange)
                     {
-                    case Communication::command::trip:
-                        prev_request = Communication::command::battery;
-                        HC12.sendCommand (prev_request);
-                        break;
-                    case Communication::command::battery:
-                        prev_request = Communication::command::trip;
-                        HC12.sendCommand (prev_request);
-                        break;
-                    default:
-                        break;
+                    pendingLmodeChange = false;
+                    data_container.setLightsMode (l_mode_sel);
+                    data_container.setUnderlightsPwr (ul_pwr_sel);
+                    data_container.loadLightControllerParams (HC12.argbuf ());
+                    HC12.sendCommand (Communication::command::lights);
+                    }
+                // Requests are at second
+                else
+                    {
+                    waitingForResponse = true;
+                    // Sending request 
+                    switch (prev_request)
+                        {
+                        case Communication::command::trip:
+                            prev_request = Communication::command::battery;
+                            HC12.sendCommand (prev_request);
+                            break;
+                        case Communication::command::battery:
+                            prev_request = Communication::command::trip;
+                            HC12.sendCommand (prev_request);
+                            break;
+                        default:
+                            break;
+                        }
                     }
                 }
             // else sending standart Drive Controller command
@@ -154,14 +166,8 @@ int main()
                                   data_container.getTrip (), data_container.getOdo ());
 
                 // Handles top btn (lights mode)
-                if (changeLightsModeBtnHandler (&b_top, l_mode_sel) || pendingLmodeChange)
-                    {
-                    pendingLmodeChange = false;
-                    data_container.setLightsMode (l_mode_sel);
-                    data_container.setUnderlightsPwr (ul_pwr_sel);
-                    data_container.loadLightControllerParams (HC12.argbuf ());
-                    HC12.sendCommand (Communication::command::lights);
-                    }
+                if (changeLightsModeBtnHandler (&b_top, l_mode_sel))
+                    pendingLmodeChange = true;
                 // Handles btm btn (ride   mode)
                 changeRideModeBtnHandler (&b_btm, r_mode_sel);
                 // Mid btn
@@ -221,7 +227,8 @@ int main()
                 break;
             }
 
-        lsi.update (battery.getVoltage ());
+        lsi.update (battery.getVoltage (), 
+                    connected? data_container.getBatPercents () : -1.0);
         OLED.display ();
         }
 	}
