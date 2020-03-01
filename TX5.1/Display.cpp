@@ -140,7 +140,17 @@ void Display::drawMainScr (lights_mode l_mode_sel, bool ul_pwr_sel,
 
 void Display::drawMenuScr (int cursor)
     {
-    
+    screen.clearDisplay ();
+    screen.setCursor (SCR_MID_X - 40, 0);
+    screen.setTextSize (1);
+    screen.print ("Underlights");
+    screen.setCursor (SCR_MID_X - 40, 8);
+    screen.print ("Battery");
+    screen.setCursor (SCR_MID_X - 40, 16);
+    screen.print ("Trip control");
+
+    screen.setCursor (0, 8*cursor);
+    screen.print ("-->");
     }
 
 void Display::display ()

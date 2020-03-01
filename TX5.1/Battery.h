@@ -14,7 +14,7 @@
 class Battery
     {
     private:
-        double bat_voltage;
+        double bat_voltage, bat_voltage_smooth;
         uint8_t ADCpin;
 
         long readVcc ();

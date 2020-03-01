@@ -12,6 +12,14 @@
 #define N_TESTS 10
 #define HOLD_TIME 500
 
+// Navigation
+#define NAV_UP 1
+#define NAV_FWD 2
+#define NAV_NONE 0
+#define NAV_BWD -2
+#define NAV_DN -1
+
+
 class Button
     {
     public:

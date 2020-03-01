@@ -46,7 +46,7 @@ int main()
                                       LED_2_R, LED_2_G, LED_2_B);
     
     // Communication vars
-    bool pendingChange = false;
+    bool pendingLmodeChange = false;
     bool connected = false;
     bool waitingForResponse = false;
     TIMER_SET (last_request_tmr);
@@ -60,6 +60,7 @@ int main()
 
     // Other
     Display::screen_name scr_id = Display::screen_name::main;
+    int menu_cursor = 0;
 
     // Main cycle
 	forever 
@@ -144,6 +145,7 @@ int main()
         switch (scr_id)
             {
             case Display::screen_name::main:
+                {
                 OLED.drawMainScr (l_mode_sel, ul_pwr_sel,
                                   static_cast <int> (data_container.getSpeed ()),
                                   r_mode_sel,
@@ -152,24 +154,60 @@ int main()
                                   data_container.getTrip (), data_container.getOdo ());
 
                 // Handles top btn (lights mode)
-                if (changeLightsModeBtnHandler (&b_top, l_mode_sel))
+                if (changeLightsModeBtnHandler (&b_top, l_mode_sel) || pendingLmodeChange)
                     {
+                    pendingLmodeChange = false;
                     data_container.setLightsMode (l_mode_sel);
+                    data_container.setUnderlightsPwr (ul_pwr_sel);
                     data_container.loadLightControllerParams (HC12.argbuf ());
                     HC12.sendCommand (Communication::command::lights);
                     }
                 // Handles btm btn (ride   mode)
                 changeRideModeBtnHandler (&b_btm, r_mode_sel);
-
+                // Mid btn
+                if (b_mid.state () == Button::State::released)
+                    {
+                    scr_id = Display::screen_name::menu;
+                    menu_cursor = 0;
+                    }
                 break;
+                }
             case Display::screen_name::menu:
-                // reserved
+                {
+                OLED.drawMenuScr (menu_cursor);
+
+                if (b_mid.state () == Button::State::hold)
+                    scr_id = Display::screen_name::main;
+                else if (b_mid.state () == Button::State::released)
+                    switch (menu_cursor)
+                            {
+                            case MENU_CURSOR_POS_UL:
+                                ul_pwr_sel = !ul_pwr_sel;
+                                pendingLmodeChange = true;
+                                scr_id = Display::screen_name::main;
+                                break;
+                            case MENU_CURSOR_POS_BAT:
+                                // Reserved
+                                break;
+                            case MENU_CURSOR_POS_TRP:
+                                // Reserved
+                                break;
+                            default:
+                                break;
+                            }
+                        
+                if (b_top.state () == Button::State::released)
+                    if (menu_cursor > MENU_CURSOR_POS_UL)
+                        menu_cursor--;
+                if (b_btm.state () == Button::State::released)
+                        if (menu_cursor < MENU_CURSOR_POS_TRP)
+                            menu_cursor++;
+                        
                 break;
+                }
             default:
                 break;
             }
-
-
 
         lsi.update (battery.getVoltage ());
         OLED.display ();

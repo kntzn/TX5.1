@@ -31,6 +31,10 @@
 
 #define MSCR_MODE_MIN_MARGIN_X 40
 
+#define MENU_CURSOR_POS_UL 0
+#define MENU_CURSOR_POS_BAT 1
+#define MENU_CURSOR_POS_TRP 2
+
 // TODO: move drawing to separate inline functions
 
 class Display
@@ -39,7 +43,8 @@ class Display
         enum class screen_name
             {
             main,
-            menu
+            menu,
+            connecting
             };
     private:
         Adafruit_SSD1306 screen;

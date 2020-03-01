@@ -42,14 +42,17 @@ void Battery::update ()
     double new_bat_voltage = (readVcc () * aver_analog () / 1023 / 1000.0);
 
     // Smootes out voltage value
-    bat_voltage = new_bat_voltage * (1.0 - VOLTAGE_SMOOTH_K) +
-                      bat_voltage *        VOLTAGE_SMOOTH_K;
+    bat_voltage_smooth = new_bat_voltage * (1.0 - VOLTAGE_SMOOTH_K) +
+                             bat_voltage *        VOLTAGE_SMOOTH_K;
+
+    if (fabs (bat_voltage_smooth - bat_voltage) > 0.05)
+        bat_voltage = bat_voltage_smooth;
     }
 
 Battery::Battery (uint8_t read_pin):
     ADCpin (read_pin)
     {
-    bat_voltage = (readVcc () * aver_analog () / 1023 / 1000.0);
+    bat_voltage_smooth = bat_voltage = (readVcc () * aver_analog () / 1023 / 1000.0);
     }
 
 double Battery::getVoltage ()
